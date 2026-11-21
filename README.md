@@ -15,13 +15,15 @@ our AI-service handoff and a local reference form for the React frontend team.
 - Groq-powered interpretation with strict structured output and local validation;
   OpenAI remains an optional alternative.
 - Local request form with employee names, draft review, risk reasons, and activity steps.
+- Editable mock defaults, request title,
+  priority, requester reference, business unit, and read-only employee role/department.
 - Optional **Describe the request → Use AI to fill form** workflow. The model fills
   the form; the requester reviews it and completes missing details before generating
   the final draft. Regular form entry needs no model key.
 - Java HTTP adapter and explicit pending-request submission interface, tested against
   simulated Java responses. Real Java integration is pending the backend team.
 
-**Validation:** 64 automated tests pass. All eight synthetic live Groq cases passed
+**Validation:** 68 automated tests pass. All eight synthetic live Groq cases passed
 in the final run; see [the saved results](docs/live-smoke-results.json). One initial
 polite role-change case over-clarified; the prompt was refined and the full suite
 rerun successfully. This is a smoke test, not proof of perfect language understanding.
@@ -42,6 +44,12 @@ Open [the request form](http://127.0.0.1:8002/) or
 Port 8002 is used for this local handoff to avoid the earlier demo server on 8000.
 The service can use port 8000 when it is free. Use the same port in the browser as
 in the server command. Different server processes have different key environments.
+
+Mock mode prefills an editable role-change request automatically. Choose the
+request type and edit its details as needed. Demo effective dates
+use the next weekday in Asia/Kolkata; no date scheduling or approval is performed.
+The requester reference is labeled demo text and never supplies authentication.
+HTTP mode does not auto-populate synthetic demo values.
 
 Default `BACKEND_MODE=mock` uses four synthetic employees and never submits,
 approves, applies, or persists access changes. No API key is required for manual
@@ -97,6 +105,12 @@ Example typed request to `/agent/role-change`:
 {
   "employee_code": "EF-1001",
   "target_role": "MANAGER",
+  "request_context": {
+    "request_title": "Engineering leadership transition",
+    "priority": "NORMAL",
+    "requester_reference": "HR Operations (demo)",
+    "business_unit": "Engineering"
+  },
   "details": {
     "effective_date": "2026-11-23",
     "justification": "Leading the engineering team.",
@@ -109,6 +123,12 @@ Example typed request to `/agent/role-change`:
 Employee EF-1001 currently has the ENGINEER role. This draft grants REPORT_VIEW
 and TEAM_DIRECTORY, revokes GIT_READ and GIT_WRITE, and retains JIRA_EDIT and
 VPN_ACCESS. No current access changes while generating it.
+
+`request_context` is optional descriptive metadata preserved in the draft.
+Priority is urgency, independent of the computed risk suggestion. On HTTP
+submission, non-default context is forwarded to Java as `request_context`;
+Java must support this optional object and still derive the authenticated
+requester from the token rather than `requester_reference`.
 
 For message input, `/agent/plan` accepts:
 

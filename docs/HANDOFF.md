@@ -20,6 +20,9 @@ and verified limits, not completion of the Java/React IAM application.
   risk explanations, and activity steps. This is a reference for the team's React implementation.
 - Optional AI description-to-form workflow, non-secret provider status, partial
   field prefill, and review-before-final-draft behavior. Manual form entry stays available.
+- Optional request title, priority, demo requester reference, and business unit
+  metadata. Read-only current role/department fields and mock-only editable demo
+  examples make role-change/offboarding demonstrations easy to reproduce.
 - Automated tests, dependency versions, current Python OpenAPI export, and proposed Java contract.
 - Optional OpenAI Responses API interpreter using strict structured extraction,
   local validation, safe failure responses, and simulated HTTP tests. Live
@@ -41,7 +44,7 @@ and verified limits, not completion of the Java/React IAM application.
   snapshot checks, temporary/no-change blocking, and idempotency-key forwarding.
   Only matching PENDING_APPROVAL receipts with 0/2 approvals are accepted.
 - Simulated Java integration tests; mock-mode submission remains disabled.
-- 64 passing automated tests plus a successful JavaScript syntax check. The
+- 68 passing automated tests plus a successful JavaScript syntax check. The
   AI-to-form path was also exercised in the browser on the Groq-enabled server.
 
 ## Remaining team integration and policy decisions
@@ -119,8 +122,8 @@ for API docs. Regenerate the schema with `python scripts/export_openapi.py`.
 > calculation, required-detail validation and clarification, advisory risk reasons,
 > automated tests, and API handoff documentation. Groq model-assisted role-change
 > interpretation and eight synthetic live checks passed after prompt refinement.
-> The form now supports optional AI prefill with manual review. All 64 automated
-> tests pass. The Java HTTP adapter and explicit
+> The form supports optional AI prefill, editable mock demo defaults, request
+> metadata, and manual review. All 68 automated tests pass. The Java HTTP adapter and explicit
 > pending-request submission path are implemented with simulated integration tests;
 > live Java compatibility remains pending. Archival policy is undefined and
 > temporary expiry is not implemented. Approvals, Gmail, persistence, and applying

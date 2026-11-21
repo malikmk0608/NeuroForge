@@ -6,6 +6,16 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
+class RequestContext(BaseModel):
+    """Descriptive request metadata; never an authenticated actor or approval."""
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+
+    request_title: str = Field(default="Employee access change", min_length=1, max_length=160)
+    priority: Literal["LOW", "NORMAL", "HIGH"] = "NORMAL"
+    requester_reference: str | None = Field(default=None, min_length=1, max_length=160)
+    business_unit: str | None = Field(default=None, min_length=1, max_length=120)
+
+
 class RequestDetails(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
@@ -19,6 +29,7 @@ class AgentRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
     message: str = Field(min_length=1, max_length=4000, pattern=r"\S")
     details: RequestDetails = Field(default_factory=RequestDetails)
+    request_context: RequestContext = Field(default_factory=RequestContext)
     use_model: bool = Field(default=False, description="Explicitly use the configured OpenAI or Groq interpreter. Sends this message and supplied details to that provider; requires server-side configuration.")
 
 
@@ -27,12 +38,14 @@ class RoleChangeRequest(BaseModel):
     employee_code: str = Field(pattern=r"^EF-\d{4}$")
     target_role: Literal["ENGINEER", "MANAGER", "HR", "FINANCE"]
     details: RequestDetails = Field(default_factory=RequestDetails)
+    request_context: RequestContext = Field(default_factory=RequestContext)
 
 
 class OffboardRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
     employee_code: str = Field(pattern=r"^EF-\d{4}$")
     details: RequestDetails = Field(default_factory=RequestDetails)
+    request_context: RequestContext = Field(default_factory=RequestContext)
 
 
 class ActivityStep(BaseModel):
@@ -79,6 +92,7 @@ class RiskSuggestion(BaseModel):
 class AccessPlan(BaseModel):
     status: Literal["DRAFT"] = "DRAFT"
     employee_code: str
+    request_context: RequestContext = Field(default_factory=RequestContext)
     action: Literal["ROLE_CHANGE", "OFFBOARD"]
     current_role: str
     target_role: Literal["ENGINEER", "MANAGER", "HR", "FINANCE"] | None

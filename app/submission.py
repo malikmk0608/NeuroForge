@@ -22,6 +22,7 @@ async def submit_reviewed_plan(backend, reviewed: AccessPlan, idempotency_key: U
     result = await build_graph(backend).ainvoke({
         "message": message, "details": reviewed.details,
         "activity_steps": [], "use_model": False,
+        "request_context": reviewed.request_context,
     })
     fresh = result.get("plan")
     if fresh is None:
@@ -49,6 +50,9 @@ async def submit_reviewed_plan(backend, reviewed: AccessPlan, idempotency_key: U
         payload["expected_policy_version"] = fresh.expected_policy_version
     else:
         payload["assignment_type"] = None
+    if fresh.request_context.model_dump(exclude_defaults=True):
+        # Descriptive fields only; Java still derives the requester from the token.
+        payload["request_context"] = fresh.request_context.model_dump()
     # Java must atomically recheck versions and derive PENDING_APPROVAL itself.
     # Idempotency and requester authorization are enforced by Java, not a local cache.
     return await backend.create_access_request(payload, str(idempotency_key))

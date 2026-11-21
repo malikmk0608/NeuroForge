@@ -18,7 +18,7 @@ from app.submission import submit_reviewed_plan
 app = FastAPI(
     title="NeuroForge AI Agent",
     description="Role-change/offboarding drafts and Java request submission. Defaults to read-only mock mode.",
-    version="0.12.0",
+    version="0.13.0",
 )
 
 STATIC_DIRECTORY = Path(__file__).resolve().parent / "static"
@@ -65,6 +65,7 @@ async def role_change(request: RoleChangeRequest, backend=Depends(get_backend)):
     return await plan(AgentRequest(
         message=f"Move {request.employee_code} to {request.target_role}",
         details=request.details,
+        request_context=request.request_context,
     ), backend)
 
 
@@ -77,12 +78,13 @@ async def health():
 async def offboard(request: OffboardRequest, backend=Depends(get_backend)):
     return await plan(AgentRequest(
         message=f"Offboard {request.employee_code}", details=request.details,
+        request_context=request.request_context,
     ), backend)
 
 
 @app.post("/agent/plan", response_model=AgentResponse)
 async def plan(request: AgentRequest, backend=Depends(get_backend)):
-    result = await build_graph(backend).ainvoke({"message": request.message, "details": request.details, "use_model": request.use_model, "activity_steps": []})
+    result = await build_graph(backend).ainvoke({"message": request.message, "details": request.details, "request_context": request.request_context, "use_model": request.use_model, "activity_steps": []})
     interpretation = result["interpretation"]
     needs_clarification = bool(interpretation.clarification_questions)
     employee = result.get("current_employee")

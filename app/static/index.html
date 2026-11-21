@@ -8,12 +8,12 @@
   <script src="/static/app.js" defer></script>
 </head>
 <body>
-  <header><a class="brand" href="/">N<span>NeuroForge</span></a><span class="environment">Prototype · Sample employee data</span></header>
+  <header><a class="brand" href="/">N<span>NeuroForge</span></a><span class="environment">Access Management</span></header>
   <main>
-    <div class="intro"><p class="eyebrow">IDENTITY & ACCESS MANAGEMENT</p><h1>Request an access change</h1><p>Manage role transitions and employee departures. Review every permission before approval.</p></div>
+    <div class="intro"><p class="eyebrow">IDENTITY & ACCESS MANAGEMENT</p><h1>Request an access change</h1><p>Prepare employee access requests for review and approval.</p></div>
     <div class="layout">
       <section class="card" aria-labelledby="form-title">
-        <details class="ai-assistant" open>
+        <details class="ai-assistant">
           <summary><strong>Describe the request</strong> <span id="model-status" class="tag">Checking AI availability</span></summary>
           <p class="hint">Optional: let AI fill the form, then review and complete the details below.</p>
           <label for="ai-description">Request description</label>
@@ -24,11 +24,24 @@
         </details>
         <div class="card-heading"><h2 id="form-title">Request details</h2><span id="request-tag" class="tag">Role change</span></div>
         <form id="request-form">
+          <label for="request-title">Request title <span>*</span></label>
+          <input id="request-title" maxlength="160" required value="Employee access change">
+          <label for="requester-reference">Requested by (demo reference)</label>
+          <input id="requester-reference" maxlength="160" placeholder="Requester name or team">
+          <div class="field-grid">
+            <div><label for="priority">Priority</label><select id="priority"><option value="LOW">Low</option><option value="NORMAL" selected>Normal</option><option value="HIGH">High</option></select></div>
+            <div><label for="business-unit">Business unit / team</label><input id="business-unit" maxlength="120" placeholder="For example, Engineering"></div>
+          </div>
+          <p class="hint">Priority indicates urgency. The access plan assesses risk separately.</p>
           <label for="request-type">Request type <span>*</span></label>
           <select id="request-type"><option value="ROLE_CHANGE">Role change</option><option value="OFFBOARD">Offboarding</option></select>
           <label for="employee">Employee <span>*</span></label>
           <select id="employee" required disabled><option value="">Loading employees…</option></select>
           <p id="employee-context" class="hint">Select an employee to see their current role.</p>
+          <div class="field-grid employee-facts">
+            <div><label for="current-role">Current role</label><input id="current-role" readonly placeholder="Populated from employee record"></div>
+            <div><label for="current-department">Current department</label><input id="current-department" readonly placeholder="Populated from employee record"></div>
+          </div>
           <div class="field-grid">
             <div id="target-role-field"><label for="target-role">Target role <span>*</span></label><select id="target-role" required disabled><option value="">Select a role</option></select></div>
             <div><label for="effective-date">Effective date <span>*</span></label><input id="effective-date" type="date" required></div>
@@ -42,7 +55,7 @@
           <p id="offboard-note" class="notice" hidden>Offboarding proposes revoking all current access. Two approvals are required before any change can be applied.</p>
           <label for="justification">Business justification <span>*</span></label>
           <textarea id="justification" rows="4" required maxlength="1000" placeholder="Explain why this change is needed and what responsibilities are changing."></textarea>
-          <div class="form-footer"><span>All fields are required.</span><button id="generate" type="submit" disabled>Generate access plan</button></div>
+          <div class="form-footer"><span>Fields marked * are required.</span><button id="generate" type="submit" disabled>Generate access plan</button></div>
         </form>
         <p id="error" class="error" role="alert" hidden></p>
       </section>
@@ -51,6 +64,7 @@
         <div id="empty-state"><div class="plan-icon" aria-hidden="true">≡</div><h3>A clear view of every change</h3><p>Complete the form to see which permissions will be granted, revoked, and retained.</p><div class="approval-note"><strong>Two approvals required</strong><p>Generating a plan does not change employee access.</p></div></div>
         <div id="plan-result" hidden>
           <p id="plan-summary" class="summary"></p>
+          <p id="plan-context" class="hint"></p>
           <div id="permission-groups"></div>
           <div class="approval-note"><strong id="risk-heading"></strong><ul id="risk-reasons"></ul><p>Suggested by demo rules. Every request still requires two approvals.</p></div>
           <div id="questions" class="notice" hidden></div>
@@ -59,7 +73,7 @@
         </div>
       </aside>
     </div>
-    <footer>NeuroForge AI Agent <span>Local request-form prototype · <a href="/docs">API documentation</a></span></footer>
+    <footer>NeuroForge <span>Identity &amp; Access Management · <a href="/docs">API documentation</a></span></footer>
   </main>
 </body>
 </html>

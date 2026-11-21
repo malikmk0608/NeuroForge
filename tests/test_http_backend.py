@@ -107,6 +107,17 @@ class HttpBackendTests(unittest.TestCase):
         self.assertEqual(self.posts[0]['proposed_permissions']['grant'], [])
         self.assertEqual(self.posts[0]['proposed_permissions']['retain'], [])
 
+    def test_request_context_is_forwarded_as_descriptive_metadata_not_actor(self):
+        draft = self.draft()
+        context = {'request_title': 'Engineering leadership transition', 'priority': 'HIGH',
+                   'requester_reference': 'Demo HR Operations', 'business_unit': 'Engineering'}
+        draft['request_context'] = context
+        response = self.submit(draft)
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertEqual(self.posts[0]['request_context'], context)
+        self.assertNotIn('actor_id', self.posts[0])
+        self.assertNotIn('requested_by', self.posts[0])
+
     def test_modified_permissions_and_stale_snapshots_never_post(self):
         for change in ['permissions', 'employee_version', 'policy_version', 'current_access']:
             with self.subTest(change=change):

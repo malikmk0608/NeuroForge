@@ -87,6 +87,12 @@ fresh validated payload to Java. A stale or modified reviewed snapshot gets 409
 and is not posted. Java must still atomically compare versions at creation and
 again enforce reviewed-plan/approval requirements before applying.
 
+Optional `plan.request_context` contains request_title, priority,
+requester_reference, and business_unit. Non-default context is forwarded as
+an optional object in the Java creation payload. Confirm Java supports these
+fields. The requester reference is descriptive only; identity and authority
+must still come from the login token. Priority does not override risk or approvals.
+
 Java derives status and approvals. The Python outbound payload contains no
 APPROVED/APPLIED instruction, requester override, or approval count. A receipt
 is accepted only if it matches the submitted action/employee and reports

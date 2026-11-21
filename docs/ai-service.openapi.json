@@ -3,7 +3,7 @@
   "info": {
     "title": "NeuroForge AI Agent",
     "description": "Role-change/offboarding drafts and Java request submission. Defaults to read-only mock mode.",
-    "version": "0.12.0"
+    "version": "0.13.0"
   },
   "paths": {
     "/agent/form-options": {
@@ -315,6 +315,9 @@
             "type": "string",
             "title": "Employee Code"
           },
+          "request_context": {
+            "$ref": "#/components/schemas/RequestContext"
+          },
           "action": {
             "type": "string",
             "enum": [
@@ -467,6 +470,9 @@
           },
           "details": {
             "$ref": "#/components/schemas/RequestDetails"
+          },
+          "request_context": {
+            "$ref": "#/components/schemas/RequestContext"
           },
           "use_model": {
             "type": "boolean",
@@ -676,6 +682,9 @@
           },
           "details": {
             "$ref": "#/components/schemas/RequestDetails"
+          },
+          "request_context": {
+            "$ref": "#/components/schemas/RequestContext"
           }
         },
         "additionalProperties": false,
@@ -716,6 +725,57 @@
           "retain"
         ],
         "title": "PermissionChanges"
+      },
+      "RequestContext": {
+        "properties": {
+          "request_title": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Request Title",
+            "default": "Employee access change"
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "NORMAL",
+              "HIGH"
+            ],
+            "title": "Priority",
+            "default": "NORMAL"
+          },
+          "requester_reference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 160,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Requester Reference"
+          },
+          "business_unit": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 120,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Business Unit"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "RequestContext",
+        "description": "Descriptive request metadata; never an authenticated actor or approval."
       },
       "RequestDetails": {
         "properties": {
@@ -835,6 +895,9 @@
           },
           "details": {
             "$ref": "#/components/schemas/RequestDetails"
+          },
+          "request_context": {
+            "$ref": "#/components/schemas/RequestContext"
           }
         },
         "additionalProperties": false,

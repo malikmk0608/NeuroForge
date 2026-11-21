@@ -11,7 +11,7 @@ from app.interpreter import interpret_message
 from app.model_interpreter import interpret_with_model
 from app.planner import compare_permission_sets
 from app.risk import suggest_risk
-from app.schemas import AccessPlan, ActivityStep, Employee, Interpretation, PermissionChanges, RequestDetails
+from app.schemas import AccessPlan, ActivityStep, Employee, Interpretation, PermissionChanges, RequestDetails, RequestContext
 
 
 class AgentState(TypedDict):
@@ -27,6 +27,7 @@ class AgentState(TypedDict):
     use_model: bool
     expected_policy_version: int | None
     backend_mode: str
+    request_context: RequestContext
 
 
 async def interpret(state: AgentState) -> dict:
@@ -82,6 +83,7 @@ def create_plan(state: AgentState) -> dict:
     )
     plan = AccessPlan(
         employee_code=employee.employee_code,
+        request_context=state.get("request_context", RequestContext()),
         action=action,
         current_role=employee.role,
         target_role=target_role,

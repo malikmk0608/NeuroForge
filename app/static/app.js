@@ -4,6 +4,9 @@ let employees = [];
 let revision = 0;
 let modelConfigured = false;
 let busy = false;
+let backendMode = 'mock';
+let autoTitle = true;
+let autoBusinessUnit = true;
 
 function setBusy(value) {
   busy = value;
@@ -41,14 +44,68 @@ function clearPreview() {
 function updateEmployee() {
   const employee = employees.find((item) => item.employee_code === byId('employee').value);
   byId('employee-context').textContent = employee
-    ? `Current role: ${employee.role} · ${employee.department}`
+    ? `Current employee record for ${employee.name}.`
     : 'Select an employee to see their current role.';
+  byId('current-role').value = employee?.role || '';
+  byId('current-department').value = employee?.department || '';
   const previousManager = byId('manager').value;
   byId('manager').replaceChildren(option('', 'Select a manager'));
   employees.filter((item) => item.employee_code !== byId('employee').value).forEach((item) => {
     byId('manager').append(option(item.employee_code, `${item.name} · ${item.employee_code}`));
   });
   if (previousManager !== byId('employee').value) byId('manager').value = previousManager;
+  updateContextSuggestions();
+}
+
+function updateContextSuggestions() {
+  const employee = employees.find((item) => item.employee_code === byId('employee').value);
+  if (autoTitle) {
+    const action = byId('request-type').value === 'OFFBOARD' ? 'offboarding' : `role change to ${byId('target-role').value || 'a new role'}`;
+    byId('request-title').value = employee ? `${employee.name} - ${action}` : 'Employee access change';
+  }
+  if (autoBusinessUnit) byId('business-unit').value = employee?.department || '';
+}
+
+function readRequestContext() {
+  return {
+    request_title: byId('request-title').value.trim(),
+    priority: byId('priority').value,
+    requester_reference: byId('requester-reference').value.trim() || null,
+    business_unit: byId('business-unit').value.trim() || null,
+  };
+}
+
+function demoEffectiveDate() {
+  const parts = Object.fromEntries(new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit',
+  }).formatToParts(new Date()).map((part) => [part.type, part.value]));
+  const day = new Date(Date.UTC(Number(parts.year), Number(parts.month) - 1, Number(parts.day) + 1));
+  while (day.getUTCDay() === 0 || day.getUTCDay() === 6) day.setUTCDate(day.getUTCDate() + 1);
+  return day.toISOString().slice(0, 10);
+}
+
+function prefillForm() {
+  if (busy || backendMode !== 'mock') return;
+  const offboarding = byId('request-type').value === 'OFFBOARD';
+  const code = offboarding ? 'EF-1004' : 'EF-1001';
+  if (!employees.some((employee) => employee.employee_code === code)) return;
+  autoTitle = true;
+  autoBusinessUnit = true;
+  byId('employee').value = code;
+  byId('target-role').value = offboarding ? '' : 'MANAGER';
+  updateEmployee();
+  byId('manager').value = 'EF-1002';
+  byId('effective-date').value = demoEffectiveDate();
+  byId('assignment-type').value = offboarding ? '' : 'PERMANENT';
+  byId('temporary-note').hidden = true;
+  byId('justification').value = offboarding
+    ? 'Employee departure following completion of the handover. Revoke all existing access on the effective date.'
+    : 'Taking responsibility for the engineering team and its delivery reporting.';
+  byId('requester-reference').value = 'Rohan Mehta - HR Operations (demo)';
+  byId('priority').value = 'NORMAL';
+  byId('ai-description').value = '';
+  byId('ai-feedback').hidden = true;
+  updateRequestType();
 }
 
 function updateRequestType() {
@@ -59,6 +116,7 @@ function updateRequestType() {
   byId('assignment-type').required = !offboarding;
   byId('offboard-note').hidden = !offboarding;
   byId('request-tag').textContent = offboarding ? 'Offboarding' : 'Role change';
+  updateContextSuggestions();
   clearPreview();
 }
 
@@ -74,6 +132,10 @@ function renderPlan(data) {
   byId('plan-summary').textContent = plan.action === 'OFFBOARD'
     ? `${data.current_employee.name}: offboarding · Revoke all current access`
     : `${data.current_employee.name}: ${plan.current_role} → ${plan.target_role}`;
+  const context = plan.request_context;
+  byId('plan-context').textContent = `${context.request_title} · Priority: ${context.priority}`
+    + (context.business_unit ? ` · ${context.business_unit}` : '')
+    + (context.requester_reference ? ` · Requester reference: ${context.requester_reference}` : '');
   byId('permission-groups').replaceChildren();
   for (const [key, label] of [['grant', 'Grant'], ['revoke', 'Revoke'], ['retain', 'Retain']]) {
     const section = document.createElement('div');
@@ -119,6 +181,9 @@ form.addEventListener('input', () => {
   clearPreview();
   byId('ai-feedback').hidden = true;
 });
+byId('request-title').addEventListener('input', () => { autoTitle = false; });
+byId('business-unit').addEventListener('input', () => { autoBusinessUnit = false; });
+byId('target-role').addEventListener('change', updateContextSuggestions);
 byId('ai-description').addEventListener('input', () => {
   clearPreview();
   byId('ai-feedback').hidden = true;
@@ -146,6 +211,7 @@ form.addEventListener('submit', async (event) => {
     const offboarding = byId('request-type').value === 'OFFBOARD';
     const payload = {
       employee_code: byId('employee').value,
+      request_context: readRequestContext(),
       details: {
         effective_date: byId('effective-date').value,
         justification: byId('justification').value.trim(),
@@ -213,7 +279,7 @@ byId('interpret-description').addEventListener('click', async () => {
   try {
     const response = await fetch('/agent/plan', {
       method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({message, use_model: true}),
+      body: JSON.stringify({message, use_model: true, request_context: readRequestContext()}),
       signal: AbortSignal.timeout(45000),
     });
     const data = await response.json();
@@ -245,6 +311,7 @@ async function loadOptions() {
     if (!response.ok) throw new Error('Unable to load employee data. Reload the page to try again.');
     const data = await response.json();
     employees = data.employees;
+    backendMode = data.backend_mode;
     modelConfigured = Boolean(data.model?.configured);
     const provider = data.model?.provider === 'groq' ? 'Groq' : 'OpenAI';
     byId('model-status').textContent = modelConfigured ? `${provider} configured` : 'AI not configured';
@@ -257,6 +324,7 @@ async function loadOptions() {
     updateEmployee();
     ['employee', 'target-role', 'manager'].forEach((id) => { byId(id).disabled = false; });
     setBusy(false);
+    if (backendMode === 'mock') prefillForm();
   } catch (error) {
     showError(error.message || 'Unable to load form data. Reload the page to try again.');
   }

@@ -143,6 +143,26 @@ permission differences, manager eligibility, requester authorization, and date
 rules before persisting the request. A stale snapshot produces 409 and requires
 a fresh plan; never silently approve a different plan.
 
+Optional request context is now supported by the Python form and draft schema:
+
+```json
+{
+  "request_context": {
+    "request_title": "Engineering leadership transition",
+    "priority": "NORMAL",
+    "requester_reference": "HR Operations (demo)",
+    "business_unit": "Engineering"
+  }
+}
+```
+
+Java should accept this optional object alongside the submission fields above.
+Python forwards it when context differs from its defaults; otherwise it omits
+the object for compatibility. Priority is LOW/NORMAL/HIGH urgency, not a risk
+classification. `requester_reference` is untrusted descriptive text, never
+the authenticated requester, an actor override, or approval evidence. Java
+must continue deriving identity from the validated login token.
+
 Proposed 201 response:
 
 ```json
