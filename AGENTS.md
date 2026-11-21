@@ -1,6 +1,6 @@
 # NeuroForge repository instructions
 
-Read `docs/START_HERE.md` and `docs/HANDOFF.md` before implementing changes.
+Read `START_HERE.md` and `docs/HANDOFF.md` before implementing changes.
 The user may assign a teammate's role in the current chat; work on that role's
 scope while preserving the existing AI-service contract. This repository is an
 AI-service handoff, not a completed Java/React IAM application.
@@ -81,4 +81,4 @@ obtain the user's authorization before external calls. Never claim live Java
 integration, approvals, email, or enforcement were verified using mock tests.
 
 For new Java/React work, add the chosen build/run/test commands and configuration
-examples to `docs/START_HERE.md` and update the handoff as behavior changes.
+examples to `START_HERE.md` and update the handoff as behavior changes.

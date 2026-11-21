@@ -17,7 +17,7 @@ successful live smoke test, not a comprehensive model-quality evaluation.
 ## Set up on macOS/Linux
 
 Create your own key at <https://console.groq.com/keys>. Never paste it in chat.
-Start with the clone/environment instructions in [START_HERE.md](START_HERE.md).
+Start with the clone/environment instructions in [START_HERE.md](../START_HERE.md).
 From your own cloned repository root, activate the environment if needed:
 
 ```zsh

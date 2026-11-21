@@ -9,10 +9,10 @@ chat history.
 ## Read in this order
 
 1. This guide: prerequisites, first run, and role-specific starting tasks.
-2. `HANDOFF.md`: what is implemented, tested, simulated, and still pending.
-3. `../AGENTS.md`: project boundaries for an AI coding assistant.
-4. `BACKEND_CONTRACT.md` and `BACKEND_SETUP.md`: backend owner/integration work.
-5. `ai-service.openapi.json`: actual Python routes and JSON fields for integration.
+2. `docs/HANDOFF.md`: what is implemented, tested, simulated, and still pending.
+3. `AGENTS.md`: project boundaries for an AI coding assistant.
+4. `docs/BACKEND_CONTRACT.md` and `docs/BACKEND_SETUP.md`: backend owner/integration work.
+5. `docs/ai-service.openapi.json`: actual Python routes and JSON fields for integration.
 
 ## Prerequisites by role
 
@@ -92,7 +92,7 @@ It was not committed, and cloning the repository will not provide it. Closing
 that terminal or using a different one can require configuring it again.
 
 For AI testing on their own machine, teammates should create their own key at
-<https://console.groq.com/keys> and follow `GROQ_SETUP.md`. They do not need to
+<https://console.groq.com/keys> and follow `docs/GROQ_SETUP.md`. They do not need to
 replace the model client or write new extraction logic. Current settings are:
 
 ```text
@@ -119,7 +119,7 @@ access does not automatically configure the NeuroForge application's Groq key.
 ## What the Java backend owner should do first
 
 1. Run the Python service in mock mode and review a role-change/offboarding draft.
-2. Read `BACKEND_CONTRACT.md` and confirm/adapt the proposed read/create endpoints
+2. Read `docs/BACKEND_CONTRACT.md` and confirm/adapt the proposed read/create endpoints
    and JSON shapes before frontend and backend implementations diverge.
 3. Seed the four report employees and role policies; provide positive integer
    employee/policy versions. Treat currently listed permissions as a policy assumption
@@ -135,7 +135,7 @@ access does not automatically configure the NeuroForge application's Groq key.
 
 The Python HTTP adapter is implemented and simulated tests pass. Real Java
 compatibility, persistence, token handling, Gmail, and approval/apply behavior
-are not yet verified. See `BACKEND_SETUP.md` for caller-token forwarding.
+are not yet verified. See `docs/BACKEND_SETUP.md` for caller-token forwarding.
 
 ## What the React frontend owner should do first
 
@@ -179,7 +179,7 @@ Replace the bracketed role/task with the teammate's actual responsibility:
 
 > I am continuing NeuroForge from this repository. My role is [Java backend /
 > React frontend / integration], and my task is [specific task]. First read
-> AGENTS.md, docs/START_HERE.md, docs/HANDOFF.md, README.md, and the relevant API
+> AGENTS.md, START_HERE.md, docs/HANDOFF.md, README.md, and the relevant API
 > contract/setup documents. Inspect the current source and tests before editing.
 > Explain what already works, what is mocked, and what my role still needs to
 > implement. Preserve the existing Python AI planner and its JSON contracts;
