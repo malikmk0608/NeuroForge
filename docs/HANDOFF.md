@@ -3,6 +3,12 @@
 This is the AI-service handoff as of 2026-11-21. It records implemented behavior
 and verified limits, not completion of the Java/React IAM application.
 
+New teammates should first read [START_HERE.md](START_HERE.md) for tools,
+clone/run commands, per-role tasks, key setup, and an AI-assistant starting prompt.
+The original developer's Groq key and running localhost server are not shared
+by cloning this repository. Manual form use needs no provider key; AI-assisted
+use requires a key configured on the server that the teammate is actually using.
+
 ## Implemented
 
 - FastAPI Python service with typed JSON validation and interactive API docs.

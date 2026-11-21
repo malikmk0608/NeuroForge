@@ -4,6 +4,11 @@ AI-assisted employee access planning service for the NeuroForge IAM prototype.
 Built with Python 3.13, FastAPI, LangGraph, and Pydantic. This repository contains
 our AI-service handoff and a local reference form for the React frontend team.
 
+**Teammates: begin with [docs/START_HERE.md](docs/START_HERE.md).** It covers
+prerequisites, Windows/macOS/Linux setup, private Groq configuration, each role's
+next tasks, and a prompt for continuing with an AI coding assistant.
+Repository-level [AGENTS.md](AGENTS.md) records the architecture and implementation boundaries.
+
 ## What is working
 
 - Role-change planning, including promotions, demotions, and no-change requests.

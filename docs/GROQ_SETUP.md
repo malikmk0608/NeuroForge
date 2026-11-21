@@ -14,14 +14,13 @@ ROLE_CHANGE / EF-1001 / MANAGER, generated the expected permission differences
 using mock backend data, and asked for the four omitted details. This is one
 successful live smoke test, not a comprehensive model-quality evaluation.
 
-## Set up in macOS zsh
+## Set up on macOS/Linux
 
 Create your own key at <https://console.groq.com/keys>. Never paste it in chat.
-In the terminal running your port-8002 server, press Control-C to stop it.
-If using a new terminal, first run:
+Start with the clone/environment instructions in [START_HERE.md](START_HERE.md).
+From your own cloned repository root, activate the environment if needed:
 
 ```zsh
-cd /Users/malikfamilymacbook/Documents/ChatGPT/AIAgent
 source .venv/bin/activate
 ```
 
@@ -40,6 +39,27 @@ export LLM_PROVIDER=groq
 export GROQ_MODEL=openai/gpt-oss-20b
 python -m uvicorn app.main:app --reload --port 8002
 ```
+
+If a server is already running in that terminal, stop it with Control-C before
+entering these commands. Environment settings must be present when it starts.
+
+## Set up on Windows PowerShell
+
+From the cloned repository root, after creating/installing into `.venv` as
+described in START_HERE.md, enter your key at a hidden prompt:
+
+```powershell
+$groqSecureKey = Read-Host 'Groq API key' -AsSecureString
+$env:GROQ_API_KEY = [System.Net.NetworkCredential]::new('', $groqSecureKey).Password
+Remove-Variable groqSecureKey
+$env:LLM_PROVIDER = 'groq'
+$env:GROQ_MODEL = 'openai/gpt-oss-20b'
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8002
+```
+
+The Windows commands have not yet been verified on a teammate's machine.
+They use the environment's Python directly rather than requiring PowerShell
+activation scripts. Do not echo the key or paste it into an AI chat.
 
 The app reads environment variables; it does not automatically read `.env`.
 The key stays in this terminal's environment and is not persisted by these
