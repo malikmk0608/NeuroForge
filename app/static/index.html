@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NeuroForge · Access requests</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <header><a class="brand" href="/">N<span>NeuroForge</span></a><span class="environment">Prototype · Sample employee data</span></header>
+  <main>
+    <div class="intro"><p class="eyebrow">IDENTITY & ACCESS MANAGEMENT</p><h1>Request an access change</h1><p>Manage role transitions and employee departures. Review every permission before approval.</p></div>
+    <div class="layout">
+      <section class="card" aria-labelledby="form-title">
+        <details class="ai-assistant" open>
+          <summary><strong>Describe the request</strong> <span id="model-status" class="tag">Checking AI availability</span></summary>
+          <p class="hint">Optional: let AI fill the form, then review and complete the details below.</p>
+          <label for="ai-description">Request description</label>
+          <textarea id="ai-description" rows="3" maxlength="4000" placeholder="For example: Give EF-1001 the MANAGER role."></textarea>
+          <p id="provider-disclosure" class="hint">Your description is sent to the configured AI provider only when you choose Use AI to fill form.</p>
+          <button id="interpret-description" type="button" disabled>Use AI to fill form</button>
+          <p id="ai-feedback" class="notice" role="status" hidden></p>
+        </details>
+        <div class="card-heading"><h2 id="form-title">Request details</h2><span id="request-tag" class="tag">Role change</span></div>
+        <form id="request-form">
+          <label for="request-type">Request type <span>*</span></label>
+          <select id="request-type"><option value="ROLE_CHANGE">Role change</option><option value="OFFBOARD">Offboarding</option></select>
+          <label for="employee">Employee <span>*</span></label>
+          <select id="employee" required disabled><option value="">Loading employees…</option></select>
+          <p id="employee-context" class="hint">Select an employee to see their current role.</p>
+          <div class="field-grid">
+            <div id="target-role-field"><label for="target-role">Target role <span>*</span></label><select id="target-role" required disabled><option value="">Select a role</option></select></div>
+            <div><label for="effective-date">Effective date <span>*</span></label><input id="effective-date" type="date" required></div>
+          </div>
+          <label for="manager">Reporting manager <span>*</span></label>
+          <select id="manager" required disabled><option value="">Select a manager</option></select>
+          <p class="hint">Choose the employee’s reporting manager. This does not select the two approvers.</p>
+          <div id="assignment-field"><label for="assignment-type">Assignment type <span>*</span></label>
+          <select id="assignment-type" required><option value="">Select assignment type</option><option value="PERMANENT">Permanent</option><option value="TEMPORARY">Temporary</option></select>
+          <p id="temporary-note" class="notice" hidden>Temporary assignment is recorded as a request detail. Automatic expiry is not available in this prototype.</p></div>
+          <p id="offboard-note" class="notice" hidden>Offboarding proposes revoking all current access. Two approvals are required before any change can be applied.</p>
+          <label for="justification">Business justification <span>*</span></label>
+          <textarea id="justification" rows="4" required maxlength="1000" placeholder="Explain why this change is needed and what responsibilities are changing."></textarea>
+          <div class="form-footer"><span>All fields are required.</span><button id="generate" type="submit" disabled>Generate access plan</button></div>
+        </form>
+        <p id="error" class="error" role="alert" hidden></p>
+      </section>
+      <aside class="card review" aria-labelledby="review-title" aria-live="polite" aria-busy="false">
+        <div class="card-heading"><h2 id="review-title">Access plan</h2><span id="plan-status" class="tag">Awaiting details</span></div>
+        <div id="empty-state"><div class="plan-icon" aria-hidden="true">≡</div><h3>A clear view of every change</h3><p>Complete the form to see which permissions will be granted, revoked, and retained.</p><div class="approval-note"><strong>Two approvals required</strong><p>Generating a plan does not change employee access.</p></div></div>
+        <div id="plan-result" hidden>
+          <p id="plan-summary" class="summary"></p>
+          <div id="permission-groups"></div>
+          <div class="approval-note"><strong id="risk-heading"></strong><ul id="risk-reasons"></ul><p>Suggested by demo rules. Every request still requires two approvals.</p></div>
+          <div id="questions" class="notice" hidden></div>
+          <div class="approval-note"><strong>Draft · No approvals recorded</strong><p>This preview has not been submitted. Approval routing and access changes are not connected yet.</p></div>
+          <details><summary>View activity</summary><ol id="activity"></ol></details>
+        </div>
+      </aside>
+    </div>
+    <footer>NeuroForge AI Agent <span>Local request-form prototype · <a href="/docs">API documentation</a></span></footer>
+  </main>
+</body>
+</html>

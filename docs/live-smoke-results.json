@@ -1,0 +1,65 @@
+{
+  "provider": "groq",
+  "employee_backend": "mock",
+  "synthetic_data_only": true,
+  "planned_cases": 8,
+  "executed_cases": 8,
+  "results": [
+    {
+      "case": "role change",
+      "http_status": 200,
+      "expected_status": "draft_plan_ready",
+      "actual_status": "draft_plan_ready",
+      "passed": true
+    },
+    {
+      "case": "demotion",
+      "http_status": 200,
+      "expected_status": "draft_plan_ready",
+      "actual_status": "draft_plan_ready",
+      "passed": true
+    },
+    {
+      "case": "offboarding",
+      "http_status": 200,
+      "expected_status": "draft_plan_ready",
+      "actual_status": "draft_plan_ready",
+      "passed": true
+    },
+    {
+      "case": "negative request",
+      "http_status": 200,
+      "expected_status": "needs_clarification",
+      "actual_status": "needs_clarification",
+      "passed": true
+    },
+    {
+      "case": "unsupported role",
+      "http_status": 200,
+      "expected_status": "needs_clarification",
+      "actual_status": "needs_clarification",
+      "passed": true
+    },
+    {
+      "case": "missing employee",
+      "http_status": 200,
+      "expected_status": "needs_clarification",
+      "actual_status": "needs_clarification",
+      "passed": true
+    },
+    {
+      "case": "complete metadata",
+      "http_status": 200,
+      "expected_status": "draft_plan_ready",
+      "actual_status": "draft_plan_ready",
+      "passed": true
+    },
+    {
+      "case": "undefined archival",
+      "http_status": 200,
+      "expected_status": "needs_clarification",
+      "actual_status": "needs_clarification",
+      "passed": true
+    }
+  ]
+}

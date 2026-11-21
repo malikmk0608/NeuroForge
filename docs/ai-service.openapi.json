@@ -1,0 +1,951 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "NeuroForge AI Agent",
+    "description": "Role-change/offboarding drafts and Java request submission. Defaults to read-only mock mode.",
+    "version": "0.12.0"
+  },
+  "paths": {
+    "/agent/form-options": {
+      "get": {
+        "summary": "Form Options",
+        "operationId": "form_options_agent_form_options_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agent/role-change": {
+      "post": {
+        "summary": "Role Change",
+        "operationId": "role_change_agent_role_change_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleChangeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agent/offboard": {
+      "post": {
+        "summary": "Offboard",
+        "operationId": "offboard_agent_offboard_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OffboardRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agent/plan": {
+      "post": {
+        "summary": "Plan",
+        "operationId": "plan_agent_plan_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agent/submit": {
+      "post": {
+        "summary": "Submit",
+        "operationId": "submit_agent_submit_post",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Idempotency-Key"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmissionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubmissionReceipt"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AccessPlan": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "DRAFT",
+            "title": "Status",
+            "default": "DRAFT"
+          },
+          "employee_code": {
+            "type": "string",
+            "title": "Employee Code"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "ROLE_CHANGE",
+              "OFFBOARD"
+            ],
+            "title": "Action"
+          },
+          "current_role": {
+            "type": "string",
+            "title": "Current Role"
+          },
+          "target_role": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "ENGINEER",
+                  "MANAGER",
+                  "HR",
+                  "FINANCE"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Role"
+          },
+          "expected_employee_version": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Employee Version"
+          },
+          "expected_policy_version": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Policy Version"
+          },
+          "permissions": {
+            "$ref": "#/components/schemas/PermissionChanges"
+          },
+          "has_changes": {
+            "type": "boolean",
+            "title": "Has Changes"
+          },
+          "risk_suggestion": {
+            "$ref": "#/components/schemas/RiskSuggestion"
+          },
+          "required_approvals": {
+            "type": "integer",
+            "const": 2,
+            "title": "Required Approvals",
+            "default": 2
+          },
+          "ready_for_submission": {
+            "type": "boolean",
+            "title": "Ready For Submission",
+            "default": false
+          },
+          "details": {
+            "$ref": "#/components/schemas/RequestDetails"
+          },
+          "details_complete": {
+            "type": "boolean",
+            "title": "Details Complete"
+          },
+          "missing_details": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Missing Details"
+          },
+          "clarification_questions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Clarification Questions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "employee_code",
+          "action",
+          "current_role",
+          "target_role",
+          "permissions",
+          "has_changes",
+          "risk_suggestion",
+          "details",
+          "details_complete",
+          "missing_details",
+          "clarification_questions"
+        ],
+        "title": "AccessPlan"
+      },
+      "ActivityStep": {
+        "properties": {
+          "node": {
+            "type": "string",
+            "title": "Node"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "completed",
+              "needs_clarification",
+              "not_found",
+              "not_implemented"
+            ],
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "node",
+          "status",
+          "message"
+        ],
+        "title": "ActivityStep"
+      },
+      "AgentRequest": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Message"
+          },
+          "details": {
+            "$ref": "#/components/schemas/RequestDetails"
+          },
+          "use_model": {
+            "type": "boolean",
+            "title": "Use Model",
+            "description": "Explicitly use the configured OpenAI or Groq interpreter. Sends this message and supplied details to that provider; requires server-side configuration.",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "title": "AgentRequest"
+      },
+      "AgentResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft_plan_ready",
+              "employee_not_found",
+              "policy_not_found",
+              "needs_clarification"
+            ],
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "backend_mode": {
+            "type": "string",
+            "enum": [
+              "mock",
+              "http"
+            ],
+            "title": "Backend Mode",
+            "default": "mock"
+          },
+          "interpretation": {
+            "$ref": "#/components/schemas/Interpretation"
+          },
+          "extracted_details": {
+            "$ref": "#/components/schemas/RequestDetails"
+          },
+          "current_employee": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Employee"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "plan": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AccessPlan"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "activity_steps": {
+            "items": {
+              "$ref": "#/components/schemas/ActivityStep"
+            },
+            "type": "array",
+            "title": "Activity Steps"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "interpretation",
+          "activity_steps"
+        ],
+        "title": "AgentResponse"
+      },
+      "Employee": {
+        "properties": {
+          "employee_code": {
+            "type": "string",
+            "title": "Employee Code"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "department": {
+            "type": "string",
+            "title": "Department"
+          },
+          "role": {
+            "type": "string",
+            "title": "Role"
+          },
+          "permissions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Permissions"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version"
+          }
+        },
+        "type": "object",
+        "required": [
+          "employee_code",
+          "name",
+          "department",
+          "role",
+          "permissions"
+        ],
+        "title": "Employee"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Interpretation": {
+        "properties": {
+          "action": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "ROLE_CHANGE",
+                  "OFFBOARD"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Action"
+          },
+          "employee_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Employee Code"
+          },
+          "target_role": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "ENGINEER",
+                  "MANAGER",
+                  "HR",
+                  "FINANCE"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Role"
+          },
+          "clarification_questions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Clarification Questions"
+          }
+        },
+        "type": "object",
+        "title": "Interpretation"
+      },
+      "OffboardRequest": {
+        "properties": {
+          "employee_code": {
+            "type": "string",
+            "pattern": "^EF-\\d{4}$",
+            "title": "Employee Code"
+          },
+          "details": {
+            "$ref": "#/components/schemas/RequestDetails"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "employee_code"
+        ],
+        "title": "OffboardRequest"
+      },
+      "PermissionChanges": {
+        "properties": {
+          "grant": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Grant"
+          },
+          "revoke": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Revoke"
+          },
+          "retain": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Retain"
+          }
+        },
+        "type": "object",
+        "required": [
+          "grant",
+          "revoke",
+          "retain"
+        ],
+        "title": "PermissionChanges"
+      },
+      "RequestDetails": {
+        "properties": {
+          "effective_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Effective Date",
+            "description": "Requested date, YYYY-MM-DD. Scheduling is not implemented yet."
+          },
+          "justification": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Justification"
+          },
+          "manager": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^EF-\\d{4}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Manager",
+            "description": "Manager employee code, for example EF-1002."
+          },
+          "assignment_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "PERMANENT",
+                  "TEMPORARY"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assignment Type"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "RequestDetails"
+      },
+      "RiskSuggestion": {
+        "properties": {
+          "level": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "MEDIUM",
+              "HIGH"
+            ],
+            "title": "Level"
+          },
+          "reasons": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Reasons"
+          },
+          "advisory_only": {
+            "type": "boolean",
+            "const": true,
+            "title": "Advisory Only",
+            "default": true
+          },
+          "rules_version": {
+            "type": "string",
+            "const": "demo-v1",
+            "title": "Rules Version",
+            "default": "demo-v1"
+          }
+        },
+        "type": "object",
+        "required": [
+          "level",
+          "reasons"
+        ],
+        "title": "RiskSuggestion"
+      },
+      "RoleChangeRequest": {
+        "properties": {
+          "employee_code": {
+            "type": "string",
+            "pattern": "^EF-\\d{4}$",
+            "title": "Employee Code"
+          },
+          "target_role": {
+            "type": "string",
+            "enum": [
+              "ENGINEER",
+              "MANAGER",
+              "HR",
+              "FINANCE"
+            ],
+            "title": "Target Role"
+          },
+          "details": {
+            "$ref": "#/components/schemas/RequestDetails"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "employee_code",
+          "target_role"
+        ],
+        "title": "RoleChangeRequest"
+      },
+      "SubmissionReceipt": {
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Request Id"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "ROLE_CHANGE",
+              "OFFBOARD"
+            ],
+            "title": "Action"
+          },
+          "employee_code": {
+            "type": "string",
+            "pattern": "^EF-\\d{4}$",
+            "title": "Employee Code"
+          },
+          "status": {
+            "type": "string",
+            "const": "PENDING_APPROVAL",
+            "title": "Status"
+          },
+          "required_approvals": {
+            "type": "integer",
+            "const": 2,
+            "title": "Required Approvals"
+          },
+          "approved_count": {
+            "type": "integer",
+            "const": 0,
+            "title": "Approved Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "request_id",
+          "action",
+          "employee_code",
+          "status",
+          "required_approvals",
+          "approved_count"
+        ],
+        "title": "SubmissionReceipt"
+      },
+      "SubmissionRequest": {
+        "properties": {
+          "plan": {
+            "$ref": "#/components/schemas/AccessPlan"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "plan"
+        ],
+        "title": "SubmissionRequest"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
