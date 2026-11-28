@@ -40,6 +40,15 @@ class MockEmployeeBackend:
                 role="FINANCE", permissions=["ERP_READ", "EXPENSE_APPROVE", "REPORT_VIEW"],
             ),
         ]
+        for code, name in [
+            ("EF-1005", "Ananya Rao"),
+            ("EF-1006", "Kabir Shah"),
+            ("EF-1007", "Diya Menon"),
+        ]:
+            employees.append(Employee(
+                employee_code=code, name=name, department="Engineering", role="ENGINEER",
+                permissions=list(employees[0].permissions),
+            ))
         self._employees = {employee.employee_code: employee for employee in employees}
         # Prototype assumption: the report's listed key permissions are treated
         # as complete role policies. Teammates must confirm these before integration.

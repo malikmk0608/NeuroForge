@@ -1,5 +1,10 @@
 # Groq model setup
 
+For the **signed-in HR portal**, follow [Optional Groq prefill](../START_HERE.md#optional-groq-prefill). Its launcher starts Python on port 8012 and serves React on 8081. The instructions below run the standalone planner on port 8002.
+
+**Workspace layout.** Run Python setup, tests, and scripts from `ai-service/`. Service-relative paths such as `app/` and `scripts/` below refer to that directory. Shared API contracts and saved smoke results are in the repository-level `docs/`.
+
+
 Groq is an alternative provider for the same extraction schema and local
 validation. Official [Structured Outputs documentation](https://console.groq.com/docs/structured-outputs)
 lists `openai/gpt-oss-20b` as supporting strict mode. The API call goes to Groq,
@@ -18,7 +23,7 @@ successful live smoke test, not a comprehensive model-quality evaluation.
 
 Create your own key at <https://console.groq.com/keys>. Never paste it in chat.
 Start with the clone/environment instructions in [START_HERE.md](../START_HERE.md).
-From your own cloned repository root, activate the environment if needed:
+From the ai-service directory, activate the environment if needed:
 
 ```zsh
 source .venv/bin/activate
@@ -45,7 +50,7 @@ entering these commands. Environment settings must be present when it starts.
 
 ## Set up on Windows PowerShell
 
-From the cloned repository root, after creating/installing into `.venv` as
+From the ai-service directory, after creating/installing into `.venv` as
 described in START_HERE.md, enter your key at a hidden prompt:
 
 ```powershell

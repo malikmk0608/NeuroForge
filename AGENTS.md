@@ -1,9 +1,13 @@
 # NeuroForge repository instructions
 
+**Workspace layout.** Run Python setup, tests, and scripts from `ai-service/`. Service-relative paths such as `app/` and `scripts/` below refer to that directory. Shared API contracts and saved smoke results are in the repository-level `docs/`.
+
+The React/Vite role portals and employee application screens are in `frontend/`. Spring Boot serves their build, uses MySQL, and calls the FastAPI planner. See the root `START_HERE.md` for setup and rebuild commands. The original static form remains available for standalone planner development.
+
+
 Read `START_HERE.md` and `docs/HANDOFF.md` before implementing changes.
 The user may assign a teammate's role in the current chat; work on that role's
-scope while preserving the existing AI-service contract. This repository is an
-AI-service handoff, not a completed Java/React IAM application.
+scope while preserving the existing AI-service contract. The handoff includes a dated account of the original standalone planner.
 
 ## Current implementation
 
@@ -12,7 +16,7 @@ AI-service handoff, not a completed Java/React IAM application.
   permission comparison, and draft creation.
 - `app/model_interpreter.py` optionally calls Groq or OpenAI. Default requests
   are deterministic; explicit `use_model: true` enables the configured provider.
-- `app/backend.py` has four synthetic employees and mock role policies.
+- `app/backend.py` has seven synthetic employees and mock role policies.
   `app/http_backend.py` targets the proposed Java API, with no mock fallback.
 - `app/submission.py` revalidates reviewed plans and asks Java to persist a
   PENDING_APPROVAL request; it does not approve or apply changes.
@@ -23,8 +27,7 @@ AI-service handoff, not a completed Java/React IAM application.
 React calls authenticated Java routes; Java delegates AI planning to Python.
 Python reads employee/policy data and creates requests through Java's API.
 The standalone Python form calls Python directly only for local demonstration.
-No Java backend, React application, MySQL schema, or employee demo applications
-are currently implemented in this repository.
+The integrated launcher runs the authenticated portals on port 8081 and the HTTP-mode planner on port 8012. Gmail delivery is pending.
 
 Java/integration owns login, requester authorization, manager eligibility,
 request persistence, two distinct approvals, Gmail, audit evidence, effective-date
@@ -66,7 +69,7 @@ implement a second independent AI planning workflow in Java or React.
 
 ## Verification
 
-From the repository root with dependencies installed:
+From the ai-service directory with dependencies installed:
 
 ```bash
 python -m unittest discover -s tests -v

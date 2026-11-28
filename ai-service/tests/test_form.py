@@ -19,7 +19,8 @@ class FormTests(unittest.TestCase):
     def test_options_come_from_mock_backend(self):
         data = self.client.get('/agent/form-options').json()
         self.assertEqual(data['backend_mode'], 'mock')
-        self.assertEqual(len(data['employees']), 4)
+        self.assertEqual(len(data['employees']), 7)
+        self.assertEqual(sum(e['department'] == 'Engineering' for e in data['employees']), 5)
         self.assertEqual(set(data['roles']), {'ENGINEER', 'MANAGER', 'HR', 'FINANCE'})
 
     def test_form_and_message_routes_produce_same_plan(self):
