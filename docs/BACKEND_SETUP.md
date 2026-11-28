@@ -1,5 +1,8 @@
 # Connecting the Java backend
 
+**Workspace layout.** Run Python setup, tests, and scripts from `ai-service/`. Service-relative paths such as `app/` and `scripts/` below refer to that directory. Shared API contracts and saved smoke results are in the repository-level `docs/`.
+
+
 The HTTP adapter and submission path are implemented against
 `BACKEND_CONTRACT.md`. Automated tests use a simulated Java API. No live Java
 backend has been tested; the teammate implementing Java must confirm paths,

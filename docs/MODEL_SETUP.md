@@ -1,5 +1,8 @@
 # Optional OpenAI interpretation
 
+**Workspace layout.** Run Python setup, tests, and scripts from `ai-service/`. Service-relative paths such as `app/` and `scripts/` below refer to that directory. Shared API contracts and saved smoke results are in the repository-level `docs/`.
+
+
 For the alternative Groq provider, use [GROQ_SETUP.md](GROQ_SETUP.md).
 When explicitly selecting OpenAI, set `LLM_PROVIDER=openai` before starting
 the server, in addition to its OPENAI_API_KEY and OPENAI_MODEL variables.
@@ -27,7 +30,7 @@ Create a key in the [OpenAI API dashboard](https://platform.openai.com/api-keys)
 Keep it private. In the project's macOS zsh terminal, stop the existing server
 with Control-C. Run the following steps separately, not as one pasted block.
 
-First activate the environment from the project root:
+First activate the environment from the ai-service directory:
 
 ```zsh
 source .venv/bin/activate

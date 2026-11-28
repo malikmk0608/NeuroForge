@@ -1,5 +1,10 @@
 # NeuroForge repository instructions
 
+**Workspace layout.** Run Python setup, tests, and scripts from `ai-service/`. Service-relative paths such as `app/` and `scripts/` below refer to that directory. Shared API contracts and saved smoke results are in the repository-level `docs/`.
+
+The React/Vite HR request form is in `frontend/`. See the root `START_HERE.md` for local launch and build commands. Java/MySQL, the remaining screens, and live integration are pending. The original static form remains available for standalone use.
+
+
 Read `START_HERE.md` and `docs/HANDOFF.md` before implementing changes.
 The user may assign a teammate's role in the current chat; work on that role's
 scope while preserving the existing AI-service contract. This repository is an
@@ -23,7 +28,7 @@ AI-service handoff, not a completed Java/React IAM application.
 React calls authenticated Java routes; Java delegates AI planning to Python.
 Python reads employee/policy data and creates requests through Java's API.
 The standalone Python form calls Python directly only for local demonstration.
-No Java backend, React application, MySQL schema, or employee demo applications
+No Java backend, MySQL schema, or employee demo applications
 are currently implemented in this repository.
 
 Java/integration owns login, requester authorization, manager eligibility,
@@ -66,7 +71,7 @@ implement a second independent AI planning workflow in Java or React.
 
 ## Verification
 
-From the repository root with dependencies installed:
+From the ai-service directory with dependencies installed:
 
 ```bash
 python -m unittest discover -s tests -v

@@ -1,10 +1,55 @@
 # Start here: continuing NeuroForge
 
-This repository lets teammates run the completed AI-service handoff and build
-their Java/React parts around its API. It does not contain the complete IAM
-application. Sharing the repository shares the source, tests, and instructions;
-it does not share installed software, API credentials, a running server, or this
-chat history.
+Use these steps to run the Java, MySQL, FastAPI and React workflow locally.
+
+## Run the three login portals
+
+With the existing seeded MySQL database, run this from the repository root in PowerShell:
+
+```powershell
+cd backend
+..\ai-service\.venv\Scripts\python.exe .\scripts\start-portals.py --setup
+```
+
+Setup prompts for a local MySQL administrator. It creates the database service account `neuroforge_portal`, grants it table-specific access, and generates distinct web passwords for seeded users who still need one. Save the displayed credentials privately. Existing web passwords and employee records are preserved. The earlier `neuroforge_reader` account can continue running the directory checks.
+
+Open http://localhost:8081 after Spring Boot starts. The packaged React interface and Java session endpoints share this address. The launcher starts a separate HTTP-mode FastAPI planner on loopback port 8012. Leave this terminal open during the demo. On subsequent starts omit `--setup` and supply the MySQL service password when prompted.
+
+1. Sign in as `hr.operations`. Choose **Create access request**, select Ananya (`EF-1005`), Manager, Priya (`EF-1002`), Permanent, and a justification. Choose today's effective date for immediate application after approval. Generate the plan, then choose **Submit for approval** and note the request number.
+2. Sign in as `department.approver`, open that number and approve. Sign in as `security.approver` and approve it again. Each person can decide once. A rejection closes the request.
+3. Sign in as `EF-1005` before Apply. Ananya still has her original role even at Approved 2/2. Use a separate browser profile to keep her session open while HR works.
+4. In Ananya's **My applications**, open **Code Repository**. Leave it open in her browser profile. As HR, reopen the approved request and choose **Apply change**. The employee page refreshes every seven seconds. Check that Code Repository now shows **Access denied** and that the sample files disappear. Follow **My access** and open **Team Directory** to see **Access granted**. The HR request detail records who submitted, decided and applied it.
+
+Each employee application has a bookmarkable address under `/#apps/`, shows the signed-in employee and compares current permissions with its required permission. Code Repository, Project Tracker, Team Directory, and Finance & Expense use sample workspace content. HR Portal displays the signed-in employee's own directory record. For a local walkthrough after frontend edits, rebuild the frontend, repackage the JAR with the commands below, and restart the portal launcher.
+
+For a fresh checkout or after editing React, build the frontend first, then package the backend. The JAR includes the built frontend:
+
+```powershell
+cd frontend
+npm install
+npm run build
+cd ..\backend
+mvn package
+```
+
+## Database and Java directory
+
+Use [the database and backend setup](backend/README.md) to initialize an empty MySQL 8 database and run the Java 21 directory API. The seed has seven employees, including four engineers reporting to one Engineering manager.
+
+## Current workspace
+
+Run all Python commands below from `ai-service/` (first run `cd ai-service` from the repository root). Shared contracts and smoke evidence remain in root `docs/`.
+
+The React HR request page lives in `frontend/`. From a second terminal at the repository root:
+
+```powershell
+cd frontend
+npm install
+npm run build
+npm run dev
+```
+
+Open the local URL printed by Vite. With the portal launcher running, Vite forwards signed-in portal requests to Java on port 8081. Use an employee account to preview the five application screens after a frontend edit. The separate draft form at `/planner` uses a standalone Python service on port 8002.
 
 ## Read in this order
 
@@ -26,9 +71,9 @@ chat history.
 | Edit code with an AI assistant | Repository access, access to that coding tool, and the role prompt below | Our chat history or our personal API keys |
 
 Node is only needed for frontend development or the optional JavaScript syntax
-check. The standalone reference form is served by FastAPI without npm.
-Java dependencies, the MySQL schema, authentication configuration, Gmail sending,
-and the final React application are not supplied by this AI-service repository;
+check. The React planner requires Node and npm. The standalone reference form is served by FastAPI without npm.
+Login, request processing, Gmail sending,
+and the remaining React screens are not supplied by this AI-service repository;
 their owners must implement/document them.
 
 ## Repository access
@@ -48,11 +93,11 @@ and Groq API keys are different and should not be exchanged through repository f
 Create separate work branches for backend/frontend/integration. Merge changes
 through reviewed pull requests and pull main before starting new work. Preserve
 the existing Python service while adding other parts in clearly named directories
-such as `backend/` and `frontend/` (a suggested structure, not existing folders).
+under `backend/` and `frontend/`.
 
 ## First run: macOS/Linux
 
-From the cloned repository root, with Python 3.13 installed:
+From the ai-service directory, with Python 3.13 installed:
 
 ```bash
 python3.13 -m venv .venv
@@ -67,7 +112,7 @@ Run `python --version` after activating the environment to check the interpreter
 
 ## First run: Windows PowerShell
 
-From the cloned repository root, with Python 3.13 and the Python launcher installed:
+From the ai-service directory, with Python 3.13 and the Python launcher installed:
 
 ```powershell
 py -3.13 -m venv .venv

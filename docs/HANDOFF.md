@@ -1,5 +1,13 @@
 # NeuroForge AI service: implementation handoff
 
+**Workspace layout.** Run Python setup, tests, and scripts from `ai-service/`. Service-relative paths such as `app/` and `scripts/` below refer to that directory. Shared API contracts and saved smoke results are in the repository-level `docs/`.
+
+The current web flow includes password login, HR submission and apply, two distinct approver decisions, an audit trail and employee access refresh. Use the portal walkthrough in [START_HERE.md](../START_HERE.md). The sections below preserve the earlier Python handoff.
+
+The employee portal opens five individual demo apps from **My applications**. Each view follows the same authenticated employee profile through grants and revocations. Nikhitha reports completing the rejection, duplicate-approver, future-date and offboarding checks on her local installation.
+
+Gmail delivery is pending. When HR creates a new pending request, the integration owner should send its request number and review link to the two configured approver addresses after the transaction commits. Record delivery outcomes per recipient so retries avoid duplicate notifications. Verify receipt in both inboxes and opening the request from a signed-out browser. The current login returns to the queue, where the approver can open the request by number.
+
 This is the AI-service handoff as of 2026-11-21. It records implemented behavior
 and verified limits, not completion of the Java/React IAM application.
 
@@ -16,7 +24,7 @@ use requires a key configured on the server that the teammate is actually using.
 - Conservative deterministic employee/action/target-role extraction; no API key needed.
 - Role-change draft planning, including promotions, demotions, and same-role/no-change cases.
 - Offboarding draft planning: revoke all current permissions; grant and retain nothing.
-- Read-only mock backend with the report's four employees and four role policies.
+- Read-only mock backend with seven employees (five in Engineering) and four role policies.
 - Sorted, deduplicated Grant / Revoke / Retain lists based on actual current mock access.
 - Structured effective date, justification, reporting manager, and assignment type fields.
 - Explicitly marked message-clause detail extraction, conflict detection, and missing-detail questions.

@@ -1,7 +1,7 @@
 """Opt-in synthetic Groq checks against a local mock-mode server.
 
 Print the cases without network calls: python scripts/live_smoke.py
-Run explicitly: python scripts/live_smoke.py --run --output docs/live-smoke-results.json
+Run explicitly: python scripts/live_smoke.py --run --output ../docs/live-smoke-results.json
 No secrets are read by this script. It uses the running server's configuration.
 """
 

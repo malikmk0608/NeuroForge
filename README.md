@@ -1,8 +1,8 @@
 # NeuroForge
 
-AI-assisted employee access planning service for the NeuroForge IAM prototype.
-Built with Python 3.13, FastAPI, LangGraph, and Pydantic. This repository contains
-our AI-service handoff and a local reference form for the React frontend team.
+**Workspace layout.** Run Python setup, tests, and scripts from `ai-service/`. Service-relative paths such as `app/` and `scripts/` below refer to that directory. Shared API contracts and saved smoke results are in the repository-level `docs/`.
+
+The React portals support HR submission, two independent approver decisions, HR apply, and employee access updates against MySQL. Spring Boot serves the signed-in application and calls the FastAPI planner. Follow [the portal setup and walkthrough](START_HERE.md#run-the-three-login-portals) to provision local logins and verify a change. The standalone Python planning form is also available.
 
 **Teammates: begin with [START_HERE.md](START_HERE.md).** It covers
 prerequisites, Windows/macOS/Linux setup, private Groq configuration, each role's
@@ -56,7 +56,7 @@ use the next weekday in Asia/Kolkata; no date scheduling or approval is performe
 The requester reference is labeled demo text and never supplies authentication.
 HTTP mode does not auto-populate synthetic demo values.
 
-Default `BACKEND_MODE=mock` uses four synthetic employees and never submits,
+Default `BACKEND_MODE=mock` uses seven synthetic employees and never submits,
 approves, applies, or persists access changes. No API key is required for manual
 form entry or deterministic planning. The local form has no production login.
 

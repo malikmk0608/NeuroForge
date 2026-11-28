@@ -84,7 +84,7 @@ Python Employee model. It is required for HTTP submission. Agree on matching
 version handling in Java before enabling request submission.
 
 The list endpoint returns the same record shape in an array. The prototype
-has four synthetic employees; pagination/search can be added by agreement.
+has seven synthetic employees; pagination/search can be added by agreement.
 The manager picker uses employee codes, with display names for convenience.
 Java must validate reporting-manager eligibility, not merely existence.
 
