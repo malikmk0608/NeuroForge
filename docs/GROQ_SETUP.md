@@ -1,5 +1,7 @@
 # Groq model setup
 
+For the **signed-in HR portal**, follow [Optional Groq prefill](../START_HERE.md#optional-groq-prefill). Its launcher starts Python on port 8012 and serves React on 8081. The instructions below run the standalone planner on port 8002.
+
 **Workspace layout.** Run Python setup, tests, and scripts from `ai-service/`. Service-relative paths such as `app/` and `scripts/` below refer to that directory. Shared API contracts and saved smoke results are in the repository-level `docs/`.
 
 

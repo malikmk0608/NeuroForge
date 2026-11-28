@@ -1,13 +1,16 @@
 # NeuroForge
 
-**Workspace layout.** Run Python setup, tests, and scripts from `ai-service/`. Service-relative paths such as `app/` and `scripts/` below refer to that directory. Shared API contracts and saved smoke results are in the repository-level `docs/`.
+NeuroForge manages employee access changes. HR reviews a plan, two different approvers decide, and HR applies the approved change. Employees can watch their permissions change in five demo apps. Spring Boot serves the React portals on port 8081, stores requests and audit events in MySQL, and calls a FastAPI/LangGraph planner on port 8012.
 
-The React portals support HR submission, two independent approver decisions, HR apply, and employee access updates against MySQL. Spring Boot serves the signed-in application and calls the FastAPI planner. Follow [the portal setup and walkthrough](START_HERE.md#run-the-three-login-portals) to provision local logins and verify a change. The standalone Python planning form is also available.
+## Set up the team project
 
-**Teammates: begin with [START_HERE.md](START_HERE.md).** It covers
-prerequisites, Windows/macOS/Linux setup, private Groq configuration, each role's
-next tasks, and a prompt for continuing with an AI coding assistant.
-Repository-level [AGENTS.md](AGENTS.md) records the architecture and implementation boundaries.
+| Your starting point | What to do |
+| --- | --- |
+| New laptop or a copy of the earlier AI-only prototype | Clone this repository. Install the Python dependencies in `ai-service/.venv`, initialize an empty MySQL database from `database/schema.sql` and `database/seed.sql`, build React, package Java, then run `start-portals.py --setup`. [First-time setup](START_HERE.md#first-time-setup) |
+| Existing clone with working MySQL portals | Stop the launcher, pull the update, rebuild React and the backend JAR, then start the launcher using your saved service password. The five employee screens use the existing database and accounts. [Update an existing installation](START_HERE.md#update-an-existing-installation) |
+| Already installed and built this version | Start the launcher and open the HR, approver, or employee portal. [Start the portals](START_HERE.md#run-the-three-login-portals) |
+
+Each new database generates local passwords for one HR operator, two approvers and seven employee accounts. Manual planning works immediately. For natural-language prefill, set your own Groq key in the launcher terminal. Gmail notification delivery is pending. [Groq setup for the signed-in portal](START_HERE.md#optional-groq-prefill)
 
 ## What is working
 
@@ -25,15 +28,17 @@ Repository-level [AGENTS.md](AGENTS.md) records the architecture and implementat
 - Optional **Describe the request → Use AI to fill form** workflow. The model fills
   the form; the requester reviews it and completes missing details before generating
   the final draft. Regular form entry needs no model key.
-- Java HTTP adapter and explicit pending-request submission interface, tested against
-  simulated Java responses. Real Java integration is pending the backend team.
+- Authenticated submission, two-approver voting, an effective-date check on Apply, and a per-request audit timeline in the Java/MySQL portal.
+- Employee screens for Code Repository, Project Tracker, Team Directory, HR Portal and Finance & Expense. Each compares the required permission with the signed-in employee's current permissions and refreshes about every seven seconds.
 
 **Validation:** 68 automated tests pass. All eight synthetic live Groq cases passed
 in the final run; see [the saved results](docs/live-smoke-results.json). One initial
 polite role-change case over-clarified; the prompt was refined and the full suite
 rerun successfully. This is a smoke test, not proof of perfect language understanding.
 
-## Start locally
+## Run the standalone Python planning form
+
+For a draft-only planner development session, start in `ai-service/`. The team setup above runs the complete signed-in workflow.
 
 ```bash
 python3 -m venv .venv
@@ -163,11 +168,11 @@ requests, and temporary assignments are blocked. Java must enforce authorization
 atomic version checks, and durable idempotency itself. Only a matching
 PENDING_APPROVAL receipt with zero of two approvals is accepted.
 
-See [backend setup](docs/BACKEND_SETUP.md) and the
-[proposed Java contract](docs/BACKEND_CONTRACT.md). The live Java service has not
-been tested; actual endpoint compatibility remains the team's integration task.
+The portal launcher configures Java and Python together. Backend developers can also run the [directory integration check](backend/README.md#local-directory-integration-check) and consult the [planner-to-Java contract](docs/BACKEND_CONTRACT.md).
 
 ## Tests and handoff
+
+Run these planner checks from `ai-service/` with its virtual environment active.
 
 ```bash
 python -m unittest discover -s tests -v
@@ -175,8 +180,8 @@ node --check app/static/app.js
 python scripts/export_openapi.py
 ```
 
-Node is only needed for this optional JavaScript syntax check, not for running
-the app. Automated tests make no external model or Java API calls. The opt-in
+Node builds the React portal and runs the optional standalone JavaScript syntax
+check. The Python tests use simulated model and Java responses. The opt-in
 `python scripts/live_smoke.py --run` sends eight synthetic fixtures to Groq through
 the local mock server. Without `--run`, it only prints the cases.
 
@@ -194,7 +199,6 @@ the local mock server. Without `--run`, it only prints the cases.
 - The report's key permission lists are treated as complete role policies. Exceptions
   and separately granted entitlements are not modeled; confirm these with the backend team.
 - Risk classifications are demo heuristics, not an approved enterprise security policy.
-- No production SSO, persistent audit log, Gmail sending, approval UI, scheduling,
-  real IAM connectors, or permission application is implemented in this AI service.
+- Java provides local session login, approval, Apply and persistent audit records. Gmail delivery, production SSO, scheduled Apply and external IAM connectors remain future work.
 - Groq free-plan availability/rate limits depend on the account; failures return safe
   messages and the manual form stays available.

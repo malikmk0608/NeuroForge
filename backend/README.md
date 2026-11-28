@@ -22,7 +22,7 @@ Use these scripts once on an empty database. Avoid rerunning them on existing IA
 
 ## Run and verify
 
-Use Maven 3.6.3+ and a JDK supporting Java 21. Configure DB_USER and DB_PASSWORD privately for a database account with SELECT privileges. DB_URL defaults to jdbc:mysql://127.0.0.1:3306/neuroforge. IAM_ISSUER is the trusted OpenID Connect issuer URL. Supply it and a valid access token for audience neuroforge and scope iam.plan to exercise the Java API. Identity issuance/login is a later integration step.
+These commands are for the standalone directory API. The [signed-in portals](../START_HERE.md#first-time-setup) have their own local session login and launcher. For a standalone directory run, use Maven 3.6.3+ and a JDK supporting Java 21. Configure DB_USER and DB_PASSWORD privately for a database account with SELECT privileges. DB_URL defaults to jdbc:mysql://127.0.0.1:3306/neuroforge. IAM_ISSUER is the trusted OpenID Connect issuer URL for external caller tokens. Supply it and a valid access token for audience neuroforge and scope iam.plan to exercise that API.
 
 ```powershell
 cd backend
@@ -39,7 +39,7 @@ Invoke-RestMethod http://127.0.0.1:8081/api/employees/EF-1005 -Headers $headers
 Invoke-RestMethod http://127.0.0.1:8081/api/roles/MANAGER/permissions -Headers $headers
 ```
 
-For Python HTTP mode set BACKEND_MODE=http and BACKEND_BASE_URL=http://127.0.0.1:8081 before starting FastAPI. Include the same Authorization header in the request to FastAPI. The standalone browser form still uses mock mode by default. Request creation, approval, apply and Gmail remain later milestones.
+For standalone Python HTTP mode set BACKEND_MODE=http and BACKEND_BASE_URL=http://127.0.0.1:8081 before starting FastAPI. Include the same Authorization header in the request to FastAPI. The portal launcher supplies the HTTP-mode settings and Java delegates signed-in planner calls. Request creation, approval and Apply are available through the portal. Gmail delivery is pending.
 
 ## Local directory integration check
 
